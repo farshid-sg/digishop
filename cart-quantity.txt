@@ -1,0 +1,94 @@
+jQuery(document).ready(function($){
+    $(document).on('change','.woocommerce-mini-cart .qty', function() {
+        var cart_item_key = $(this).attr('name').match(/\[(.*?)\]/)[1];
+        var new_qty = $(this).val();
+        updateCart(cart_item_key, new_qty);
+        // console.log(cart_item_key,new_qty)
+    });
+    function updateCart(itemKey, newQty) {
+        let data = {
+          action: 'woocommerce_update_cart_item',
+          cart_item_key: itemKey,
+          new_qty: newQty
+        };
+        // console.log(data);return;
+        $.ajax({
+          type: 'POST',
+          url: custom_vars.admin_url,
+          data,
+          success: function(response) {
+            console.log(response)
+            // $(document.body).trigger('wc_fragment_refresh');
+            $('.elementor-menu-cart__subtotal .woocommerce-Price-amount ').remove();
+            $('.elementor-menu-cart__subtotal').append(`${response.total}`);
+            $('.elementor-button-icon-qty').html(response.count);
+            if($('.elementor-menu-cart__toggle_button .woocommerce-Price-currencySymbol').length){
+                $('.elementor-menu-cart__toggle_button .elementor-button-text .woocommerce-Price-amount ').remove();
+                $('.elementor-menu-cart__toggle_button .elementor-button-text').append(`${response.total}`);
+            }
+          }
+        });
+    }
+    
+})
+
+
+
+function custom_mini_cart_shortcode() {
+	ob_start();
+	woocommerce_mini_cart();
+	return ob_get_clean();
+}
+add_shortcode('custom_mini_cart', 'custom_mini_cart_shortcode');
+
+
+
+function custom_mini_cart_quantity_input($html, $cart_item, $cart_item_key) {
+    $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
+    $product_price = apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
+    
+    $quantity_input = woocommerce_quantity_input(
+        array(
+            'input_value' => $cart_item['quantity'],
+            'input_name'  => "cart[{$cart_item_key}][qty]",
+            'min_value'   => $_product->exists() && $_product->is_sold_individually() ? 1 : 0,
+            'max_value'   => $_product->exists() ? $_product->get_max_purchase_quantity($cart_item['quantity']) : '',
+        ),
+        $_product,
+        false
+    );
+    
+    return $quantity_input . $product_price;
+}
+
+// Filter to replace mini cart quantity output
+add_filter('woocommerce_widget_cart_item_quantity', 'custom_mini_cart_quantity_input', 10, 3);
+
+
+//update mini cart
+function update_cart_item_quantity() {
+	$cart_item_key = sanitize_text_field($_POST['cart_item_key']);
+	$new_qty = intval($_POST['new_qty']);
+	if ($cart_item_key && $new_qty >= 0) {
+	  WC()->cart->set_quantity($cart_item_key, $new_qty, true);
+	  WC()->cart->calculate_totals();
+	  wp_send_json(['total' => WC()->cart->get_total(),'sub'=>WC()->cart->get_subtotal('edit'),'count' =>WC()->cart->get_cart_contents_count()]);
+	}
+  //   wp_send_json_success();
+}
+  
+add_action('wp_ajax_woocommerce_update_cart_item', 'update_cart_item_quantity');
+add_action('wp_ajax_nopriv_woocommerce_update_cart_item', 'update_cart_item_quantity');
+
+
+
+
+
+
+
+
+
+
+
+
+
