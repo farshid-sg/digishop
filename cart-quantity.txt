@@ -32,6 +32,23 @@ jQuery(document).ready(function($){
     
 })
 
+jQuery(document).ready(function($){
+    const checkCartCoupon = setInterval(()=>{
+        let checkExsistsCoupon = jQuery('.wc-block-components-panel__button');
+        checkExsistsCoupon.click();
+        checkExsistsCoupon.css('display','none');
+        $('.wc-block-components-text-input label').html('افزودن کد تخفیف');
+        $('.wc-block-components-text-input input').attr('aria-label','افزودن کد تخفیف')
+        if(checkExsistsCoupon.length){
+            clearInterval(checkCartCoupon);
+        }
+    },50)
+})
+
+
+
+
+
 
 
 function custom_mini_cart_shortcode() {
