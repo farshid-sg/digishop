@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<link rel="stylesheet" href="./main.css">
+    <style>
+        *{
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        #portfolio,.header{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eee;
+        }
+        #portfolio{
+            border: 1px solid #bdbdbd;
+        }
+        .portfolio-container{
+            width: 80%;
+            height: 80%;
+            position: relative;
+            overflow: hidden;
+        }
+        .portfolio-item{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: antiquewhite;
+        }
+        .portfolio-item-2{
+                bottom: -10px;
+                z-index: 8;
+            }
+            .portfolio-item-3{
+                bottom: -20px;
+                z-index: 9;
+            }
+            .portfolio-item-4{
+                bottom: -30px;
+                z-index: 10;
+            }
+        .portfolio-items{
+            transform: translateY(90%);
+        }
+    </style>
+</head>
+<body>
+    <div class="header"></div>
+    <section id="portfolio">
+        <div class="portfolio-container">
+          <div class="portfolio-item portfolio-item-1">نمونه کار 1</div>
+          <div class="portfolio-item portfolio-items portfolio-item-2" style="background-color: red;">نمونه کار 2</div>
+          <div class="portfolio-item portfolio-items portfolio-item-3" style="background-color: aqua;">نمونه کار 3</div>
+          <div class="portfolio-item portfolio-items portfolio-item-4" style="background-color: chartreuse;">نمونه کار 4</div>
+        </div>
+      </section>
+      <div class="header"></div>
+    <script src="./gsap.js"></script>
+    <script src="./trigger.js"></script>
+    <script>
+        let tl = gsap.timeline({
+            scrollTrigger:{
+                trigger:'#portfolio',
+                markers: true,
+                start:"top top",
+                end:"bottom+=500",
+                scrub: 3, // همگام با اسکرول
+                pin: true, // قفل کردن بخش نمونه‌کارها هنگام اسکرول
+            },
+            defaults:{
+                ease:'power4.inOut'
+             }
+        });
+        tl.to('.portfolio-items',{
+            y:'0',
+            stagger:.3,
+        })
+
+    </script>
+   
+</body>
+</html>
