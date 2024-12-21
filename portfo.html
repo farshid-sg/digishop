@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<link rel="stylesheet" href="./main.css">
+    <style>
+        *{
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        overflow-x: hidden;
+        }
+
+        #portfolio {
+        position: relative;
+        height: 200vh; /* ارتفاع بیشتر برای ایجاد فضای اسکرول */
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+
+        .portfolio-container {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        background: #ddd;
+        overflow: hidden; /* برای جلوگیری از خروج نمونه‌کارها از کانتینر */
+        }
+
+        /* .portfolio-item {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: #fff;
+        background: #333;
+        border: 2px solid #000;
+        border-radius: 8px;
+        transform: translateY(100%); 
+        } */
+        .portfolio-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #fff;
+            background: #333;
+            border: 2px solid #000;
+            border-radius: 8px;
+            transform: translateY(100%); /* نقطه شروع (پایین کانتینر) */
+           /* فضای منفی برای نمایش بخشی از المان زیرین */
+           
+            }
+            .portfolio-item-1{
+                bottom: 0;
+                z-index: 7;
+                transform: unset;
+            }
+            .portfolio-item-2{
+                bottom: -10px;
+                z-index: 8;
+            }
+            .portfolio-item-3{
+                bottom: -20px;
+                z-index: 9;
+            }
+            .portfolio-item-4{
+                bottom: -30px;
+                z-index: 10;
+            }
+    </style>
+</head>
+<body>
+    <section id="portfolio">
+        <div class="portfolio-container">
+          <div class="portfolio-item portfolio-item-1">نمونه کار 1</div>
+          <div class="portfolio-item portfolio-items portfolio-item-2">نمونه کار 2</div>
+          <div class="portfolio-item portfolio-items portfolio-item-3">نمونه کار 3</div>
+          <div class="portfolio-item portfolio-items portfolio-item-4">نمونه کار 4</div>
+        </div>
+      </section>
+    
+    <script src="./gsap.js"></script>
+    <script src="./trigger.js"></script>
+    <script>
+//         document.addEventListener("DOMContentLoaded", function () {
+//   // ثبت ScrollTrigger
+//   gsap.registerPlugin(ScrollTrigger);
+
+//   // انتخاب تمام نمونه‌کارها
+//   const items = document.querySelectorAll(".portfolio-item");
+
+//   // ساخت تایم‌لاین
+//   const tl = gsap.timeline({
+//     scrollTrigger: {
+//       trigger: "#portfolio", // بخش نمونه‌کارها
+//       start: "top center", // شروع انیمیشن وقتی مرز بالای #portfolio به مرکز صفحه برسد
+//       end: "bottom+=500", // پایان انیمیشن
+//       scrub: false, // انیمیشن مستقل از اسکرول
+//       pin: false, // عدم قفل کردن بخش
+//     },
+//   });
+
+//   // اضافه کردن انیمیشن برای هر نمونه‌کار
+//   items.forEach((item, index) => {
+//     tl.fromTo(
+//       item,
+//       { y: "100%", opacity: 0, zIndex: 10 - index }, // نقطه شروع
+//       { y: 0, opacity: 1, zIndex: 10 - index, duration: 1, ease: "power2.out" }, // نقطه پایان
+//       index * 0.3 // تاخیر برای هر المان
+//     );
+//   });
+// });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        // ثبت ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // انتخاب تمام نمونه‌کارها
+        const items = document.querySelectorAll(".portfolio-items");
+
+        // ساخت تایم‌لاین
+        const tl = gsap.timeline({
+            scrollTrigger: {
+            trigger: "#portfolio", // بخش نمونه‌کارها
+            start: "center center", // شروع انیمیشن
+            end: "bottom+=200", // پایان انیمیشن
+            scrub: true, // همگام با اسکرول
+            pin: true, // قفل کردن بخش نمونه‌کارها هنگام اسکرول
+            },
+        });
+
+        // اضافه کردن انیمیشن هر نمونه‌کار به تایم‌لاین
+        items.forEach((item, index) => {
+            tl.fromTo(
+            item,
+            { y: "100%", opacity: 0 }, // نقطه شروع
+            { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, // نقطه پایان
+            index * 1 // تاخیر بین هر انیمیشن (به ترتیب)
+            );
+        });
+        });
+
+
+
+
+
+
+
+//         document.addEventListener("DOMContentLoaded", function () {
+//   // ثبت ScrollTrigger
+//   gsap.registerPlugin(ScrollTrigger);
+
+//   // انتخاب تمام نمونه‌کارها
+//   const items = document.querySelectorAll(".portfolio-item");
+
+//   // ساخت تایم‌لاین
+//   const tl = gsap.timeline({
+//     scrollTrigger: {
+//       trigger: "#portfolio", // بخش نمونه‌کارها
+//       start: "top center", // شروع انیمیشن زمانی که مرز بالای #portfolio به وسط صفحه برسد
+//       end: "bottom+=500", // پایان انیمیشن
+//       scrub: false, // انیمیشن مستقل از اسکرول
+//       pin: false, // عدم قفل کردن بخش
+//     },
+//   });
+
+//   // اضافه کردن انیمیشن هر نمونه‌کار به تایم‌لاین
+//   items.forEach((item, index) => {
+//     tl.fromTo(
+//       item,
+//       { y: "100%", opacity: 0 }, // نقطه شروع (پایین کانتینر)
+//       { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, // نقطه پایان
+//       index * 0.3 // تأخیر برای هر آیتم
+//     );
+//   });
+// });
+
+    </script>
+   
+</body>
+</html>

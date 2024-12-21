@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<link rel="stylesheet" href="./main.css">
+    <style>
+        *{
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .header{
+            height: 100vh;
+        }
+        body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+#portfolio {
+  position: relative;
+  height: 100vh;
+  background: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.portfolio-container {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  background: #ddd;
+  overflow: hidden;
+}
+
+.portfolio-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: #fff;
+  background: #333;
+  border: 2px solid #000;
+  border-radius: 8px;
+  transform: translateY(100%); /* شروع از پایین */
+}
+
+        
+    </style>
+</head>
+<body>
+    <div class="header"></div>
+
+    <section id="portfolio">
+      <div class="portfolio-container">
+        <div class="portfolio-item">نمونه کار 1</div>
+        <div class="portfolio-item">نمونه کار 2</div>
+        <div class="portfolio-item">نمونه کار 3</div>
+        <div class="portfolio-item">نمونه کار 4</div>
+      </div>
+    </section>
+
+    <div class="header"></div>
+
+    <script src="./gsap.js"></script>
+    <script src="./trigger.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+  // ثبت ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger);
+
+  // انتخاب المان‌ها
+  const items = document.querySelectorAll(".portfolio-item");
+
+  // ساخت تایم‌لاین
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#portfolio", // بخش نمونه‌کارها
+      start: "top top", // شروع انیمیشن زمانی که بالای بخش به بالای صفحه برسد
+      end: "+=3000", // طول انیمیشن (طول اسکرول)
+      scrub: true, // همگام‌سازی انیمیشن با اسکرول
+      pin: true, // قفل کردن اسکرول
+    },
+  });
+
+  // اضافه کردن انیمیشن به تایم‌لاین برای رفتن المان‌ها از پایین به بالا
+  items.forEach((item, index) => {
+    tl.fromTo(
+      item,
+      { y: "100%", opacity: 0 }, // نقطه شروع (پایین کانتینر)
+      { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, // نقطه پایان (بالای کانتینر)
+      index * 3 // تاخیر برای هر المان
+    );
+  });
+
+  // اضافه کردن انیمیشن برای برگشت المان‌ها از بالا به پایین
+  items.forEach((item, index) => {
+    tl.to(
+      item,
+      { y: "-100%", opacity: 0, duration: 1, ease: "power3.in" }, // بازگشت به پایین
+      "+=" + (index * 3) // تاخیر معکوس برای برگشت
+    );
+  });
+});
+
+    </script>
+   
+</body>
+</html>
